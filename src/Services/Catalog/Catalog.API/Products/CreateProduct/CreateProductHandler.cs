@@ -12,7 +12,7 @@ public class CreateProductValidator : AbstractValidator<CreateProductCommand>
         RuleFor(x => x.Name).NotEmpty().WithMessage("Product name is required.");
         RuleFor(x => x.Category).NotEmpty().WithMessage("Product category is required.");
         RuleFor(x => x.Description).NotEmpty().WithMessage("Product description is required.");
-        RuleFor(x => x.ImageFile[0]).NotEmpty().WithMessage("Product image file is required.");
+        RuleFor(x => x.ImageFile).NotEmpty().WithMessage("Product image file is required.");
         RuleFor(x => x.Price).GreaterThan(0).WithMessage("Product price must be greater than zero.");
     }
 }
