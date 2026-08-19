@@ -17,16 +17,14 @@ public class UpdateProductValidator : AbstractValidator<UpdateProductCommand>
     }
 }
 
-public class UpdateProductHandler(IDocumentSession session, ILogger<UpdateProductHandler> logger) : IRequestHandler<UpdateProductCommand, UpdateProductResult>
+public class UpdateProductHandler(IDocumentSession session) : IRequestHandler<UpdateProductCommand, UpdateProductResult>
 {
     public async Task<UpdateProductResult> Handle(UpdateProductCommand command, CancellationToken cancellationToken)
     {
-        logger.LogInformation("Handling UpdateProductCommand for product: {Name}", command.Name);
 
         Product? existingProduct = await session.LoadAsync<Product>(command.Id, cancellationToken);
         if (existingProduct == null)
         {
-            logger.LogWarning("Product with name {Name} not found.", command.Name);
             throw new ProductNotFoundException(command.Id);
         }
         else
@@ -40,7 +38,6 @@ public class UpdateProductHandler(IDocumentSession session, ILogger<UpdateProduc
             session.Update(existingProduct);
             await session.SaveChangesAsync(cancellationToken);
 
-            logger.LogInformation("Product with name {Name} updated successfully.", command.Name);
             return new UpdateProductResult(true);
         }
     }
