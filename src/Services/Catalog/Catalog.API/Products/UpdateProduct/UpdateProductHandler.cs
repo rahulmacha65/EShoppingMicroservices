@@ -2,6 +2,21 @@
 
 public record UpdateProductCommand(Guid Id, string Name, List<string> Category, string Description, string ImageFile, decimal Price) : ICommand<UpdateProductResult>;
 public record UpdateProductResult(bool IsSuccess);
+
+public class UpdateProductValidator : AbstractValidator<UpdateProductCommand>
+{
+    public UpdateProductValidator()
+    {
+        RuleFor(x => x.Id).NotEmpty().WithMessage("Product Id is required.");
+        RuleFor(x => x.Name).NotEmpty().WithMessage("Product name is required.")
+            .Length(2, 100).WithMessage("Product name must be between 2 and 100 characters.");
+        RuleFor(x => x.Category).NotEmpty().WithMessage("Product category is required.");
+        RuleFor(x => x.Description).NotEmpty().WithMessage("Product description is required.");
+        RuleFor(x => x.ImageFile).NotEmpty().WithMessage("Product image file is required.");
+        RuleFor(x => x.Price).GreaterThan(0).WithMessage("Product price must be greater than zero.");
+    }
+}
+
 public class UpdateProductHandler(IDocumentSession session, ILogger<UpdateProductHandler> logger) : IRequestHandler<UpdateProductCommand, UpdateProductResult>
 {
     public async Task<UpdateProductResult> Handle(UpdateProductCommand command, CancellationToken cancellationToken)
@@ -12,7 +27,7 @@ public class UpdateProductHandler(IDocumentSession session, ILogger<UpdateProduc
         if (existingProduct == null)
         {
             logger.LogWarning("Product with name {Name} not found.", command.Name);
-            throw new ProductNotFoundException();
+            throw new ProductNotFoundException(command.Id);
         }
         else
         {
