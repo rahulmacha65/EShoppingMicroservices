@@ -2,6 +2,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the DI container.
 builder.Services.AddCarter();
+builder.Services.AddScoped<IBasketRepository, BasketRepository>();
+builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 builder.Services.AddMediatR(ofg =>
 {
     ofg.RegisterServicesFromAssembly(typeof(Program).Assembly);
@@ -17,4 +19,5 @@ var app = builder.Build();
 
 // configure HTTP request pipeline
 app.MapCarter();
+app.UseExceptionHandler(options => { });
 app.Run();
