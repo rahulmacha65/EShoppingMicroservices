@@ -1,5 +1,6 @@
 //using Microsoft.Extensions.Caching.Distributed;
 
+using Discount.Grpc;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
@@ -42,6 +43,12 @@ builder.Services.AddMarten(config =>
 builder.Services.AddHealthChecks()
     .AddNpgSql(builder.Configuration.GetConnectionString("Database")!)
     .AddRedis(builder.Configuration.GetConnectionString("Redis")!);
+
+//gRPC client configuration
+builder.Services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>(options =>
+{
+    options.Address = new Uri(builder.Configuration["GrpcSettings:DiscountUrl"]!);
+});
 
 var app = builder.Build();
 
