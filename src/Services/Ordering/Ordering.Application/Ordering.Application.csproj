@@ -11,4 +11,16 @@
     <ProjectReference Include="..\Ordering.Domain\Ordering.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Orders\EventHandlers\Domain\" />
+    <Folder Include="Orders\EventHandlers\Integration\" />
+    <Folder Include="Orders\Queries\GetOrderByName\" />
+    <Folder Include="Orders\Queries\GetOrders\" />
+    <Folder Include="Orders\Queries\GetOrderByCustomer\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.19" />
+  </ItemGroup>
+
 </Project>
