@@ -6,7 +6,7 @@ using Ordering.Infrastructure.Data.Extensions;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the DI container.
-builder.Services.AddApplicationService().AddInfrastructureServices(builder.Configuration).AddApiServices();
+builder.Services.AddApplicationService().AddInfrastructureServices(builder.Configuration).AddApiServices(builder.Configuration);
 
 var app = builder.Build();
 

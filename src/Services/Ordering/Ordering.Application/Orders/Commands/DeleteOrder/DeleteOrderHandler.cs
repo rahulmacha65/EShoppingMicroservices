@@ -7,10 +7,10 @@ public class DeleteOrderHandler(IApplicationDbContext dbContext) : ICommandHandl
     public async Task<DeleteOrderResult> Handle(DeleteOrderCommand command, CancellationToken cancellationToken)
     {
         //find the order by id
-        Order? order = await dbContext.Orders.FindAsync([command.Id], cancellationToken);
+        Order? order = await dbContext.Orders.FindAsync([OrderId.Of(command.Id)], cancellationToken);
         if (order == null)
         {
-            throw new OrderNotFoundException(order.Id.Value);
+            throw new OrderNotFoundException(command.Id);
         }
 
         //save change to the database
@@ -18,6 +18,6 @@ public class DeleteOrderHandler(IApplicationDbContext dbContext) : ICommandHandl
         await dbContext.SaveChangesAsync(cancellationToken);
 
         //return the result
-        return new DeleteOrderResult(order.Id.Value);
+        return new DeleteOrderResult(true);
     }
 }
