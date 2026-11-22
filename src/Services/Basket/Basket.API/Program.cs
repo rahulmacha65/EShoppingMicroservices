@@ -1,5 +1,6 @@
 //using Microsoft.Extensions.Caching.Distributed;
 
+using BuildingBlocks.Messaging.MassTransit;
 using Discount.Grpc;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -56,6 +57,9 @@ builder.Services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>(
     };
     return hanlder;
 });
+
+//MassTransit with RabbitMQ
+builder.Services.AddMessageBroker(builder.Configuration);
 
 var app = builder.Build();
 
